@@ -1,0 +1,37 @@
+runtime: php55
+api_version: 1
+
+instance_class: F1
+
+automatic_scaling:
+  min_idle_instances: automatic
+  max_idle_instances: 1
+  min_pending_latency: 3000ms
+  max_pending_latency: automatic
+
+handlers:
+#post sensor data
+- url: /postData$
+  script: postData.php
+
+#file upload page
+- url: /uploadRequest.php$
+  script: uploadRequest.php
+
+#graph viewer
+- url: /TodaysView.php$
+  script: TodaysView.php
+
+#favicon
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+  application_readable: true
+
+#index.html
+- url: /([^/]+\.html)$
+  static_files: \1
+  upload: ([^/]+\.html)$
+  application_readable: true
+
+
