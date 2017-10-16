@@ -25,7 +25,7 @@
   foreach ($data as $sensorName => $value) {
     if ($sensorName == "timestamp") {
     	$dt = new DateTime($value);
-    	$timeStamp = $dt->getTimeStamp(); 
+    	$timeStamp = intval($dt->getTimeStamp()/10)*10; 
     }
   }
 
