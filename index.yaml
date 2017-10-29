@@ -17,3 +17,15 @@ indexes:
   - name: sensor
   - name: value
 
+- kind: sensDat3
+  properties:
+  - name: sensor
+  - name: timestamp
+  - name: value
+
+- kind: sensDat2
+  properties:
+  - name: timestamp
+  - name: P-BMP180-01
+  - name: T-ADT7410-02
+

@@ -22,6 +22,14 @@ handlers:
 - url: /TodaysView.php$
   script: TodaysView.php
 
+#graph viewer 2
+- url: /TodaysTemperature.php$
+  script: TodaysTemperature.php
+
+#convertor
+- url: /convertData.php$
+  script: convertData.php
+
 #favicon
 - url: /favicon.ico
   static_files: favicon.ico
@@ -33,5 +41,17 @@ handlers:
   static_files: \1
   upload: ([^/]+\.html)$
   application_readable: true
+
+#post sensor data TEST ****
+- url: /postData2$
+  script: postData2.php
+
+#graph viewer-for TEST *****
+- url: /todays-t.php$
+  script: todays-t.php
+
+#graph viewer 2-for TEST *****
+- url: /TodaysTemp-t.php$
+  script: TodaysTemp-t.php
 
 

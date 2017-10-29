@@ -7,6 +7,13 @@ $datastore = new DataStoreClient(['projectId' => $projectId]);
 
 date_default_timezone_set('Asia/Tokyo');
 
+///////////////////////////////////////
+$key = $datastore->key("sensDat2");
+$id  = $datastore->allocateId($key);
+var_dump($key->path());
+
+///////////////////////////////////////
+
 if (isset($_GET['_start'])) {
 	$d1 = new DateTime($_GET['_start']);
 	$d2 = clone $d1;
@@ -37,38 +44,21 @@ $sensor_name = array( 'T-ADT7410-02', 'P-BMP180-01');
 
 // query measured Temperature record
 $query = $datastore->query()
-  ->kind('sensDat3')
-  ->filter('sensor', '=', $sensor_name[0])
+  ->kind('sensDat2')
   ->filter('timestamp', '>', $d1->getTimeStamp())
   ->filter('timestamp', '<', $d2->getTimeStamp())
   ->order('timestamp')
-  ->projection(['timestamp', 'value']);
+  ->projection(['timestamp', $sensor_name[0], $sensor_name[1]]);
 
 $result = $datastore->runQuery($query);
 
 /************************** TEST DATA *********************
 $result = array(
-//		array('timestamp' => 1507728303, 'sensor' => 'T-ADT7410-01', 'value' => 27.6),
-//		array('timestamp' => 1507728303, 'sensor' => 'T-BMP180-01', 'value' => 28.4),
-//		array('timestamp' => 1507728303, 'sensor' => 'P-BMP180-01', 'value' => 999.4),
-		array('timestamp' => 1507728303, 'sensor' => 'T-ADT7410-02', 'value' => 27.6),
-//		array('timestamp' => 1507728303, 'sensor' => 'T-cpu-mavis', 'value' => 39.6),
-
-//		array('timestamp' => 1507728363, 'sensor' => 'T-ADT7410-01', 'value' => 27.7),
-//		array('timestamp' => 1507728363, 'sensor' => 'T-BMP180-01', 'value' => 28.5),
-//		array('timestamp' => 1507728363, 'sensor' => 'P-BMP180-01', 'value' => 999.8),
-//		array('timestamp' => 1507728363, 'sensor' => 'I-TSL2561v-01', 'value' => 1295.8),
-		array('timestamp' => 1507728363, 'sensor' => 'T-ADT7410-02', 'value' => 27.7),
-//		array('timestamp' => 1507728363, 'sensor' => 'T-cpu-mavis', 'value' => 40.7),
-
-//		array('timestamp' => 1507728393, 'sensor' => 'T-ADT7410-01', 'value' => 27.0),
-//		array('timestamp' => 1507728393, 'sensor' => 'P-BMP180-01', 'value' => 999.0),
-		array('timestamp' => 1507728393, 'sensor' => 'T-ADT7410-02', 'value' => 27.0),
-//		array('timestamp' => 1507728393, 'sensor' => 'T-cpu-mavis', 'value' => 39.0),
-//		array('timestamp' => 1507728363, 'sensor' => 'I-TSL2561v-01', 'value' => 1295.0),
-		array('timestamp' => 1507728453, 'sensor' => 'T-ADT7410-02', 'value' => 27.1),
-		array('timestamp' => 1507728513, 'sensor' => 'T-ADT7410-02', 'value' => 27.2),
-		array('timestamp' => 1507728573, 'sensor' => 'T-ADT7410-02', 'value' => 27.3),
+	array('timestamp' => 1507728303, 'T-ADT7410-02'=>27.6, 'P-BMP180-01'=>999.8),
+	array('timestamp' => 1507728363, 'T-ADT7410-02'=>27.2, 'P-BMP180-01'=>1000.0),
+	array('timestamp' => 1507728423, 'T-ADT7410-02'=>27.3, 'P-BMP180-01'=>1000.2),
+	array('timestamp' => 1507728483, 'T-ADT7410-02'=>27.8, 'P-BMP180-01'=>1000.4),
+	array('timestamp' => 1507728543, 'T-ADT7410-02'=>27.7, 'P-BMP180-01'=>1001.0),
 		);
 
 **************************/
@@ -88,70 +78,20 @@ foreach ($result as $sensData) {
 	$logTime->setTimeStamp($timestamp);
 	$_time = 'new Date('.$logTime->format('Y,m,d,H,i'). ',0)';
 
-	$value = $sensData['value'];
-
-	$tbl_T .= '	['.$_time.', '.$value.'],'.PHP_EOL;
-
+	$value = $sensData[$sensor_name[0]];
 	$e_sum[0] += $value;
 	$e_cnt[0] ++;
 	$e_max[0] = max($e_max[0], $value);
 	$e_min[0] = min($e_min[0], $value);
-}
+	$tbl_T .= '	['.$_time.', '.$value.'],'.PHP_EOL;
 
-// query measured Barometor record
-$query = $datastore->query()
-  ->kind('sensDat3')
-  ->filter('sensor', '=', $sensor_name[1])
-  ->filter('timestamp', '>', $d1->getTimeStamp())
-  ->filter('timestamp', '<', $d2->getTimeStamp())
-  ->order('timestamp')
-  ->projection(['timestamp', 'value']);
-
-$result = $datastore->runQuery($query);
-
-/************************** TEST DATA *********************
-$result = array(
-//		array('timestamp' => 1507728303, 'sensor' => 'T-ADT7410-01', 'value' => 27.6),
-//		array('timestamp' => 1507728303, 'sensor' => 'T-BMP180-01', 'value' => 28.4),
-		array('timestamp' => 1507728303, 'sensor' => 'P-BMP180-01', 'value' => 999.4),
-//		array('timestamp' => 1507728303, 'sensor' => 'T-ADT7410-02', 'value' => 27.6),
-//		array('timestamp' => 1507728303, 'sensor' => 'T-cpu-mavis', 'value' => 39.6),
-
-//		array('timestamp' => 1507728363, 'sensor' => 'T-ADT7410-01', 'value' => 27.7),
-//		array('timestamp' => 1507728363, 'sensor' => 'T-BMP180-01', 'value' => 28.5),
-		array('timestamp' => 1507728363, 'sensor' => 'P-BMP180-01', 'value' => 999.8),
-//		array('timestamp' => 1507728363, 'sensor' => 'I-TSL2561v-01', 'value' => 1295.8),
-//		array('timestamp' => 1507728363, 'sensor' => 'T-ADT7410-02', 'value' => 27.7),
-//		array('timestamp' => 1507728363, 'sensor' => 'T-cpu-mavis', 'value' => 40.7),
-
-//		array('timestamp' => 1507728393, 'sensor' => 'T-ADT7410-01', 'value' => 27.0),
-		array('timestamp' => 1507728393, 'sensor' => 'P-BMP180-01', 'value' => 999.0),
-//		array('timestamp' => 1507728393, 'sensor' => 'T-ADT7410-02', 'value' => 27.0),
-//		array('timestamp' => 1507728393, 'sensor' => 'T-cpu-mavis', 'value' => 39.0),
-//		array('timestamp' => 1507728363, 'sensor' => 'I-TSL2561v-01', 'value' => 1295.0),
-		);
-
-**************************/
-$g = 0;
-
-// create javascript dataset
-foreach ($result as $sensData) {
-	if (($g -= 1000) > 0) continue;
-	$g += $g0;
-
-	$timestamp = $sensData['timestamp'];
-	$logTime = new DateTime();
-	$logTime->setTimeStamp($timestamp);
-	$_time = 'new Date('.$logTime->format('Y,m,d,H,i'). ',0)';
-
-	$value = $sensData['value'];
-
-	$tbl_P .= '	['.$_time.', '.$value.'],'.PHP_EOL;
-
+	$value = $sensData[$sensor_name[1]];
 	$e_sum[1] += $value;
 	$e_cnt[1] ++;
 	$e_max[1] = max($e_max[1], $value);
 	$e_min[1] = min($e_min[1], $value);
+	$tbl_P .= '	['.$_time.', '.$value.'],'.PHP_EOL;
+
 }
 ?>
 
@@ -294,7 +234,7 @@ foreach ($result as $sensData) {
 			nexturl = "index.html";
 		}
 		else {
-			nexturl = "TodaysView.php?_start="+page+"&_span="+span;
+			nexturl = "todays-t.php?_start="+page+"&_span="+span;
 		}
 		location.href = nexturl;
 	}
@@ -306,7 +246,7 @@ foreach ($result as $sensData) {
 <body onresize="chart_T.draw(view_T, opt_T);chart_P.draw(view_P, opt_P);">
 	<h2>Temperature and Barometer (<?php echo $date?>)</h2>
 
-	<form name="gotoPage" action="TodaysView.php">
+	<form name="gotoPage" action="todays-t.php">
 	<table>
 	<tr>
 	  <td> GOTO...</td>
@@ -340,7 +280,7 @@ foreach ($result as $sensData) {
 	  </td>
 	  <td>
 	    <span style="padding-left: 40pt">
-	    <A href="TodaysTemperature.php">All sensor's Graph(Temperature)</A></span>
+	    <A href="TodaysTemp-t.php">All sensor's Graph(Temperature)</A></span>
 	  </td>
 	</tr>
 	</table>
