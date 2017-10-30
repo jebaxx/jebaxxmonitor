@@ -42,16 +42,12 @@ handlers:
   upload: ([^/]+\.html)$
   application_readable: true
 
-#post sensor data TEST ****
-- url: /postData2$
-  script: postData2.php
-
 #graph viewer-for TEST *****
-- url: /todays-t.php$
-  script: todays-t.php
+- url: /temp_barometer.php$
+  script: temp_barometer.php
 
 #graph viewer 2-for TEST *****
-- url: /TodaysTemp-t.php$
-  script: TodaysTemp-t.php
+- url: /temp_details.php$
+  script: temp_details.php
 
 

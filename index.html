@@ -7,11 +7,45 @@
 
 <h1>INDEX of the site</h1>
 <hr>
+<h3>Temperature & Barometer chart</h3>
+<a href=temp_barometer.php>Go to Today's chart</a><br>
+<h4>Past record</h4>
+
+<form action="temp_barometer.php">
+<table>
+<tr>
+  <td width=40></td>
+  <td width=60>Date</td>
+  <td width=100>
+    <input tpe="text" name="_start">
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td>span</td>
+  <td>
+    <select name="_span">
+      <option value="1">1 day</option>
+      <option value="2">2 days</option>
+      <option value="3">3 days</option>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td></td>
+  <td>
+    <input type="submit" name="GoTo" value="GoTo">
+  </td>
+</tr>
+</table>
+</form>
+
+<br><hr>
+<a href=TodaysView.php>Temperature & Barometer (test) chart</a><br>
 <a href=uploadRequest.php>Upload data(test)</a><br>
-<a href=TodaysView.php>Temperature & Barometer monitoring page</a><br>
-<a href=todays-t.php>### TEST Version ###Temperature & Barometer viewer><br>
-<hr>
 <h3>Data conversion</h3>
+
 <form action="convertData.php">
 <table>
 <tr>

@@ -22,28 +22,27 @@
   $data = $_POST['sensData'];
 
 ///////////////////////////////////////////////////////////////////////////
-  foreach ($data as $sensorName => $value) {
-    if ($sensorName == "timestamp") {
-    	$dt = new DateTime($value);
-    	$timeStamp = intval($dt->getTimeStamp()/10)*10; 
-    }
-  }
-
-  foreach ($data as $sensorName => $value) {
-    echo $sensorName."=>".$value."<br>";
-
-    if ($sensorName != "timestamp") {
-	$sensData = $datastore->entity('sensDat3');
-	$sensData["timestamp"] = $timeStamp;
-	$sensData["sensor"] = $sensorName;
-	$sensData["value"] = floatval($value);
-	$datastore->insert($sensData);
-    }
-  }
-
+//  foreach ($data as $sensorName => $value) {
+//    if ($sensorName == "timestamp") {
+//    	$dt = new DateTime($value);
+//    	$timeStamp = intval($dt->getTimeStamp()/10)*10; 
+//    }
+//  }
+//
+//  foreach ($data as $sensorName => $value) {
+//    echo $sensorName."=>".$value."<br>";
+//
+//    if ($sensorName != "timestamp") {
+//	$sensData = $datastore->entity('sensDat3');
+//	$sensData["timestamp"] = $timeStamp;
+//	$sensData["sensor"] = $sensorName;
+//	$sensData["value"] = floatval($value);
+//	$datastore->insert($sensData);
+//    }
+//  }
 ///////////////////////////////////////////////////////////////////////////
-
-  $IndexedItems = array( "T-ADT7410-02",  "P-BMP180-01",  "I-TSL2461v-01",  "I-BH1750FV1-01");
+  $IndexedItems = array( "T-ADT7410-02",  "P-BMP180-01",  "I-TSL2561v-01",  "I-BH1750FV1-01");
+///////////////////////////////////////////////////////////////////////////
 
   require_once 'google/appengine/api/cloud_storage/CloudStorageTools.php';
   use google\appengine\api\cloud_storage\CloudStorageTools;
@@ -74,7 +73,7 @@
 
   	// create new entity
   	//
-  	unset($key, $props);
+  	unset($key, $props, $notIndexedItems);
   	$key = $datastore->key('sensDat2');
   	$id = $datastore->allocateId($key);
   	$props['timestamp'] = $timestamp;
@@ -87,6 +86,11 @@
 	}
 
 	syslog(LOG_INFO, "CreteNew props_num = ". count($props));
+//	$list = "";
+//	foreach ($notIndexedItems as $sensor_name) {
+//		$list .= $sensor_name . ",";
+//	}
+//	syslog(LOG_INFO, "notIndexed: ".$list);
 	$sensData = $datastore->entity($key, $props, ['excludeFromIndexes'=> $notIndexedItems]);
 	$datastore->insert($sensData);
 
@@ -106,6 +110,11 @@
 	}
 
 	syslog(LOG_INFO, "Upsert props_num = ". count($props));
+//	$list = "";
+//	foreach ($notIndexedItems as $sensor_name) {
+//		$list .= $sensor_name . ",";
+//	}
+//	syslog(LOG_INFO, "notIndexed: ".$list);
 	$sensData = $datastore->entity($key, $props, ['excludeFromIndexes'=> $notIndexedItems]);
 	$datastore->upsert($sensData);
   }
