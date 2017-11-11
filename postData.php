@@ -77,6 +77,8 @@
   	$key = $datastore->key('sensDat2');
   	$id = $datastore->allocateId($key);
   	$props['timestamp'] = $timestamp;
+  	$props['datetime']  = $dt;
+  	$notIndexedItems[] = 'datetime';
 
 	foreach ($data as $sensName => $value) {
 		if ($sensName == 'timestamp') continue;

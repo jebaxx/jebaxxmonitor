@@ -9,6 +9,12 @@ automatic_scaling:
   min_pending_latency: 3000ms
   max_pending_latency: automatic
 
+skip_files:
+- ^(.*/)?\..*$
+- ^(.*/)?googleDrive/.*$
+- ^(.*/)?composer[^/]+$
+- ^(.*/)?old_files/.*$
+
 handlers:
 #post sensor data
 - url: /postData$

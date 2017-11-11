@@ -2,12 +2,15 @@
 if (isset($_GET['_start'])) {
 	$d1 = new DateTime($_GET['_start']);
 	$d2 = clone $d1;
-	$d2->add(new DateInterval('P0'.$_GET['_span'].'D'));
+//	$d2->add(new DateInterval('P0'.$_GET['_span'].'D'));
+	$d2->add(new DateInterval('P01D'));
+	$d2->sub(new DateInterval('PT1S'));
 	$_span = intval($_GET['_span']);
 }
 else {
 	$d1 = new DateTime("today");
 	$d2 = new DateTime("tomorrow");
+	$d2->sub(new DateInterval('PT1S'));
 	$_span = 1;
 }
 
@@ -121,8 +124,8 @@ foreach ($result as $sensData) {
 			legend: { position: 'in' },
 			vAxis: { minorGridlines: { count: 4, color: '#E6E6FA' }},
 			hAxis: { minorGridlines: { count: 3, color: '#E6E6FA' },
-				 viewWindow: {min: new Date(<?php echo $d1->format('Y,m,d,H,i') ?>,0),
-				 	      max: new Date(<?php echo $d2->format('Y,m,d,H,i') ?>,0), } },
+				 viewWindow: {min: new Date(<?php echo $d1->format('Y,m,d,H,i,s') ?>),
+				 	      max: new Date(<?php echo $d2->format('Y,m,d,H,i,s') ?>), } },
 
 			height: '350',
 			width:  '100%'

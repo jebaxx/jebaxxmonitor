@@ -42,7 +42,11 @@ foreach ($result as $sensDat3) {
 		}
 		// create new entity
 		$timestamp = $sensDat3['timestamp'];
-		$props = array('timestamp' => $sensDat3['timestamp']);
+		$dr = new DateTime();
+		$dr->setTimestamp($timestamp);
+		$props = array('timestamp' => $timestamp);
+		$props['datetime'] = $dr;
+		$notIndexedItems[] = 'datetime';
 	}
 	$sensorName = $sensDat3['sensor'];
 	$props[$sensorName] = $sensDat3['value'];

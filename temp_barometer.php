@@ -11,11 +11,13 @@ if (isset($_GET['_start'])) {
 	$d1 = new DateTime($_GET['_start']);
 	$d2 = clone $d1;
 	$d2->add(new DateInterval('P0'.$_GET['_span'].'D'));
+	$d2->sub(new DateInterval('PT1S'));
 	$_span = intval($_GET['_span']);
 }
 else {
 	$d1 = new DateTime("today");
 	$d2 = new DateTime("tomorrow");
+	$d2->sub(new DateInterval('PT1S'));
 	$_span = 1;
 }
 
@@ -58,8 +60,6 @@ $result = array(
 
 **************************/
 
-$date = $d1->format('Y/m/d');
-
 $g0 = 24*60*$_span;
 $g = 0;
 
@@ -90,6 +90,11 @@ foreach ($result as $sensData) {
 }
 ?>
 
+<!--
+/////////////////////////////////////////////////////////////////////////////////////////
+//	HTML
+/////////////////////////////////////////////////////////////////////////////////////////
+-->
 <html>
 <head>
 	<script type = "text/javascript" src="https://www.google.com/jsapi"></script>
@@ -122,8 +127,8 @@ foreach ($result as $sensData) {
 			legend: { position: 'in' },
 			vAxis: { minorGridlines: { count: 4, color: '#E6E6FA' }},
 			hAxis: { minorGridlines: { count: 3, color: '#E6E6FA' },
-				 viewWindow: {min: new Date(<?php echo $d1->format('Y,m,d,H,i') ?>,0),
-				 	      max: new Date(<?php echo $d2->format('Y,m,d,H,i') ?>,0), } },
+				 viewWindow: {min: new Date(<?php echo $d1->format('Y,m,d,H,i,s') ?>),
+				 	      max: new Date(<?php echo $d2->format('Y,m,d,H,i,s') ?>), } },
 			height: '350',
 			width:  '100%'
 		};
@@ -161,8 +166,8 @@ foreach ($result as $sensData) {
 			vAxis: { viewWindow: {min: null, max: null, },
 				 minorGridlines: { count: 3, color: '#E6E6FA' } },
 			hAxis: { minorGridlines: { count: 3, color: '#E6E6FA' },
-				 viewWindow: {min: new Date(<?php echo $d1->format('Y,m,d,H,i') ?>,0),
-				 	      max: new Date(<?php echo $d2->format('Y,m,d,H,i') ?>,0), } },
+				 viewWindow: {min: new Date(<?php echo $d1->format('Y,m,d,H,i,s') ?>),
+				 	      max: new Date(<?php echo $d2->format('Y,m,d,H,i,s') ?>), } },
 			height: '350',
 			width:  '100%'
 		};
@@ -238,36 +243,42 @@ foreach ($result as $sensData) {
 
 </head>
 
+<!--
+/////////////////////////////////////////////////////////////////////////////////////////
+//	BODY
+/////////////////////////////////////////////////////////////////////////////////////////
+-->
 <body onresize="chart_T.draw(view_T, opt_T);chart_P.draw(view_P, opt_P);">
-	<h2>Temperature and Barometer (<?php echo $date?>)</h2>
+	<h2>Temperature and Barometer (<?php 
+	$date = $d1->format('Y/m/d');
+	if ($_span > 1) $date .= " - ".$d2->format('Y/m/d');
+	echo $date;
+	?>)</h2>
 
+	<!--
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//	form 1
+	/////////////////////////////////////////////////////////////////////////////////////////
+	-->
 	<form name="gotoPage">
 	<table>
 	<tr>
-	  <td> GOTO...</td>
+	  <td width=100>
+	    <input type='date' name='Goto_Date' value='<?php
+	    	$d1->format('Y-m-d') ?>'>
+	  </td>
+	  <td>
+	    <span style="padding-right: 20pt">
+	      <button type = "button" onclick="goto_other_page(form.Goto_Date.value, form.Span.value)">
+	      GOTO
+	      </button>
+	    </span>
+	  </td>
 	  <td>
 	    <button type = "button" onclick="goto_other_page('<?php
 	    	$d3 = clone $d1;
 	    	$d3->sub(new DateInterval('P01D'));
 	    	echo $d3->format('Y-m-d H:i');  ?>', form.Span.value)" >Previous day</button>
-	  <!--
-	    <select name="GOTO">
-	      <option value="<?php
-		   $d3 = clone $d1;
-		   $d3->sub(new DateInterval('P01D'));
-		   echo $d3->format('Y-m-d H:i');
-	      			?>">previous day</option>
-	      <option value="<?php
-		   echo $d1->format('Y-m-d H:i');
-	      			?>" selected>stay here</option>
-	      <option value="<?php
-		   $d3 = clone $d1;
-		   $d3->add(new DateInterval('P01D'));
-		   echo $d3->format('Y-m-d H:i');
-	      			?>">next day</option>
-	      <option value="_Home">home</option>
-	    </select>
-	    -->
 	  </td>
 	  <td>
 	    <select name="Span">
@@ -296,15 +307,19 @@ foreach ($result as $sensData) {
 	  <td>
 	    <span style="padding-left: 40pt">
 	    <A href="temp_details.php?_start=<?php
-	    	echo $d1->format('Y-m-d H:i').'&_span=';
-	    	echo $_span;
-	    	?>">All sensors of Temperature Chart</A>
+	    	echo $d1->format('Y-m-d H:i'); 
+	    	?>&_span=1">Chart for all sensors of temperature</A>
 	    </span>
 	  </td>
 	</tr>
 	</table>
 	</form>
 
+	<!--
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//	form 2
+	/////////////////////////////////////////////////////////////////////////////////////////
+	-->
 	<form name="visibleData" style="padding-left:2px; border:1px solid gray; background-color: buttonface;">
 	  <span style="padding-right: 10pt">*Data Select:</span>
 	<?php
@@ -321,6 +336,11 @@ foreach ($result as $sensData) {
 
 	<div id="linechart_temp"></div>
 
+	<!--
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//	form 3
+	/////////////////////////////////////////////////////////////////////////////////////////
+	-->
 	<form name="scale" style="padding-left:2px; border:1px solid gray; background-color: buttonface;">
 	  <span style="padding-right: 10pt">*SCALE:</span>
 	  <input type="radio" name="s_temp" onclick="changeScale('AUTO')" checked="checked">AUTO
@@ -334,6 +354,11 @@ foreach ($result as $sensData) {
 	<div id="linechart_P"></div>
 	<hr>
 	//////////////////////////
+	<!--
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//	Summary table
+	/////////////////////////////////////////////////////////////////////////////////////////
+	-->
 	<?php echo "<h3>*** Record of the day (".$date.") ***</h3>\n"; ?>
 	<table border>
 	<thead>
@@ -355,9 +380,9 @@ foreach ($result as $sensData) {
 	  echo '</td></tr>'.PHP_EOL;
 	?>
 	</tbody>
-
 	</table>
 	<br>
+
 	<table border>
 	<thead>
 	<tr>
