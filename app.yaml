@@ -20,17 +20,9 @@ handlers:
 - url: /postData$
   script: postData.php
 
-#file upload page
-- url: /uploadRequest.php$
-  script: uploadRequest.php
-
-#graph viewer
-- url: /TodaysView.php$
-  script: TodaysView.php
-
-#graph viewer 2
-- url: /TodaysTemperature.php$
-  script: TodaysTemperature.php
+#/*.php
+- url: /([^/]+\.php)$
+  script: \1
 
 #convertor
 - url: /convertData.php$
@@ -42,18 +34,9 @@ handlers:
   upload: favicon.ico
   application_readable: true
 
-#index.html
+#/*.html
 - url: /([^/]+\.html)$
   static_files: \1
   upload: ([^/]+\.html)$
   application_readable: true
-
-#graph viewer-for TEST *****
-- url: /temp_barometer.php$
-  script: temp_barometer.php
-
-#graph viewer 2-for TEST *****
-- url: /temp_details.php$
-  script: temp_details.php
-
 
