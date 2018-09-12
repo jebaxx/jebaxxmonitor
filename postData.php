@@ -41,7 +41,7 @@
 //    }
 //  }
 ///////////////////////////////////////////////////////////////////////////
-  $IndexedItems = array( "T-ADT7410-02",  "P-BMP180-01",  "I-TSL2561v-01",  "I-BH1750FV1-01");
+  $IndexedItems = array( "T-ADT7410-02",  "P-BMP180-01",  "H-SHT-31");
 ///////////////////////////////////////////////////////////////////////////
 
   require_once 'google/appengine/api/cloud_storage/CloudStorageTools.php';

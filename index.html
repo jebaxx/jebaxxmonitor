@@ -2,44 +2,55 @@
 <head>
 <meta charset="UTF-8">
 <title>index pagae</title>
+
+<script type = "text/javascript">
+
+    function set_submit_target(target) {
+    	document.select_page.action = target;
+    }
+    
+
+    function set_current_date() {
+    	var _today = new Date();
+    	var str_today = _today.getFullYear() + '-' + ('0'+(_today.getMonth()+1)).slice(-2) + '-' + ('0'+_today.getDate()).slice(-2);
+    	document.select_page._start.value = str_today;
+    }
+
+</script>
+
+<style type="text/css">
+    span._static {
+	padding-left:12pt;
+    }
+    .header_item {
+	height: 18pt;
+    }
+</style>
+
 </head>
-<body>
+<body onload='set_current_date()'>
 
-<h1>INDEX of the site</h1>
+<h1>jebaxxmonitor INDEX page</h1>
+<a href="https://jebaxxmessage.appspot.com/index53.html">Go To PYONTA's Home</a>
 <hr>
-<h3>Temperature & Barometer chart</h3>
-<a href=temp_barometer.php>Go to Today's chart</a><br>
-<h4>Past record</h4>
-
-<form action="temp_barometer.php">
-<table>
-<tr>
-  <td width=40></td>
-  <td width=60>Date</td>
-  <td width=100>
-    <input type="date" name="_start">
-  </td>
-</tr>
-<tr>
-  <td></td>
-  <td>span</td>
-  <td>
-    <select name="_span">
+<form name='select_page' action='primary_sensors.php'>
+  <select name='dispatch_page' class='header_item' id='dispatch_page' onchange='set_submit_target(this.value)'>
+   <option value='primary_sensors.php' selected>Primary sensors</option>
+   <option value='node_emily.php'>Node Emily</option>
+   <option value='s_temp.php'>Temperature Sensors</option>
+   <option value='s_ilm.php'>Illminance Sensors</option>
+   <option value='temp_barometer.php'>(old) temp & barometer</option>
+  </select>
+  <input type="date" class='header_item' id='start_date' name="_start" value=_today>
+  <select name="_span" class='header_item' >
       <option value="1">1 day</option>
       <option value="2">2 days</option>
       <option value="3">3 days</option>
-    </select>
-  </td>
-</tr>
-<tr>
-  <td></td>
-  <td></td>
-  <td>
-    <input type="submit" name="GoTo" value="GoTo">
-  </td>
-</tr>
-</table>
+  </select>
+
+  <button type='submit' class='header_item' onclick='primary_sensors.php'>Draw Graph</button>
 </form>
+
 
 <br><hr>
 <a href=TodaysView.php>Temperature & Barometer (test) chart</a><br>
