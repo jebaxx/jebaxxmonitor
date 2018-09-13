@@ -211,7 +211,7 @@ foreach ($result as $sensData) {
 		view_C = new google.visualization.DataView(data_C);
 
 		opt_C = { 
-			title: 'Heat Source detection count',
+			title: 'Heat Source detection count / min',
 			legend: { position: 'in' },
 			vAxis: { viewWindow: {min: null, max: null, },
 				 minorGridlines: { count: 3, color: '#E6E6FA' } },
