@@ -91,6 +91,8 @@ foreach ($result as $sensData) {
 	    $e_min[$sensor_name[2]] = min($e_min[$sensor_name[2]], $value);
 	    $tbl_H .= '	[ ' . $_time . ' , ' . $value . ' ],' . PHP_EOL;
 	}
+	else 
+	    $tbl_H .= '	[ ' . $_time . ' , null ],' . PHP_EOL;
 
 	if (($value = $sensData[$sensor_name[3]]) != NULL) {
 	    $e_sum[$sensor_name[3]] += $value;
@@ -99,6 +101,8 @@ foreach ($result as $sensData) {
 	    $e_min[$sensor_name[3]] = min($e_min[$sensor_name[3]], $value);
 	    $tbl_C .= '	[ ' . $_time . ' , ' . $value . ' ],' . PHP_EOL;
 	}
+	else 
+	    $tbl_C .= '	[ ' . $_time . ' , null ],' . PHP_EOL;
 }
 
 ?>
