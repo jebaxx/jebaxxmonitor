@@ -321,6 +321,10 @@ foreach ($result as $sensData) {
 	<form name="HeaderForm">
 	<table>
 	<tr>
+	  <td width=100>
+	      <input type='date' class='header_item' name='Goto_Date' value='<?php
+	    	echo $d1->format('Y-m-d') ?>'>
+	  </td>
 	  <td>
 	    <select name='dispatch_page' class='header_item' id='dispatch_page' onchange='set_submit_target(this.value)'>
 	      <option value='primary_sensors.php'>Primary sensors</option>
@@ -329,10 +333,6 @@ foreach ($result as $sensData) {
 	      <option value='s_ilm.php'>Illminance Sensors</option>
 	      <option value='temp_barometer.php'>(old) temp & barometer</option>
 	    </select>
-	  </td>
-	  <td width=100>
-	      <input type='date' class='header_item' name='Goto_Date' value='<?php
-	    	echo $d1->format('Y-m-d') ?>'>
 	  </td>
 	  <td>
 	    <span style="padding-right: 25pt">
