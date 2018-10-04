@@ -34,6 +34,7 @@
 <a href="https://jebaxxmessage.appspot.com/index53.html">Go To PYONTA's Home</a>
 <hr>
 <form name='select_page' action='primary_sensors.php'>
+  <input type="date" class='header_item' id='start_date' name="_start" value=_today>
   <select name='dispatch_page' class='header_item' id='dispatch_page' onchange='set_submit_target(this.value)'>
    <option value='primary_sensors.php' selected>Primary sensors</option>
    <option value='node_emily.php'>Node Emily</option>
@@ -41,7 +42,6 @@
    <option value='s_ilm.php'>Illminance Sensors</option>
    <option value='temp_barometer.php'>(old) temp & barometer</option>
   </select>
-  <input type="date" class='header_item' id='start_date' name="_start" value=_today>
   <select name="_span" class='header_item' >
       <option value="1">1 day</option>
       <option value="2">2 days</option>
